@@ -12,58 +12,59 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_main)
+
         for(i in 0..9){
             val auxNota = String.format(Locale.US,"%.2f", Random.nextDouble(0.0, 10.01)).toFloat()
             val auxAltura = String.format(Locale.US,"%.2f", Random.nextDouble(1.50, 2.11)).toFloat()
             listaPersonas.add(Persona("Persona${i+1}", (18..100).random().toShort(), auxNota, auxAltura))
         }
-        when((1..4).random()){
-            1 ->{ println("Ordenado de mayor a menor por nombre.")
-                binding.tvId.text = listaPersonas.sortByDescending { it.nombre.length }.toString()
-            }
-            2 -> {println("Ordenado de mayor a menor por edad.")
-                binding.tvId.text = listaPersonas.sortByDescending { it.edad }.toString()
-            }
-            3 -> {println("Ordenado de menor a mayor por edad.")
-                binding.tvId.text = listaPersonas.sortedBy { it.edad }.toString()
-            }
-            4 -> {println("Ordenado de mayor a menor por altura.")
-                binding.tvId.text = listaPersonas.sortByDescending { it.altura }.toString()
-            }
-            else -> println("Ups no pude ordenar. el parametro del when no me vale")
-        }
-        listaPersonas.forEach { println(it) }
-    }
 
-    /*
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        //outState.putParcelableArrayList() No me vale, preguntar como sería
-         ¿¿Iría aqui??
-        //Cuando rote genero un numero del 1 al 4 aleatoriamente y ordeno
-    when((1..4).random()){
-        1 ->{ println("Ordenado de mayor a menor por nombre.")
-              listaPersonas.sortByDescending { it.nombre.length }
+        when((1..4).random()){
+            1 ->{
+                binding.tvId2.text = "Ordenado de mayor a menor por nombre."
+                listaPersonas.sortByDescending { it.nombre.length }
+                var aux = ""
+                listaPersonas.forEach { aux += it }
+                binding.tvId1.text = aux
+            }
+            2 -> {
+                binding.tvId2.text = "Ordenado de mayor a menor por edad."
+                listaPersonas.sortByDescending { it.edad }
+                var aux = ""
+                listaPersonas.forEach { aux += it }
+                binding.tvId1.text = aux
+            }
+            3 -> {
+                binding.tvId2.text = "Ordenado de menor a mayor por edad."
+                listaPersonas.sortedBy { it.edad }
+                var aux = ""
+                listaPersonas.forEach { aux += it }
+                binding.tvId1.text = aux
+            }
+            4 -> {
+                binding.tvId2.text = "Ordenado de mayor a menor por altura."
+                listaPersonas.sortByDescending { it.altura }
+                var aux = ""
+                listaPersonas.forEach { aux += it }
+                binding.tvId1.text = aux
+            }
+            else -> {
+                binding.tvId2.text = "Ups no pude ordenar. el parametro del when no me vale"
+                var aux = ""
+                listaPersonas.forEach { aux += it }
+                binding.tvId1.text = aux
+            }
         }
-        2 -> {println("Ordenado de mayor a menor por edad.")
-              listaPersonas.sortByDescending { it.edad }
-        }
-        3 -> {println("Ordenado de menor a mayor por edad.")
-              listaPersonas.sortedBy { it.edad }
-        }
-        4 -> {println("Ordenado de mayor a menor por altura.")
-              listaPersonas.sortByDescending { it.altura }
-        }
-        else -> println("Ups no pude ordenar. el parametro del when no me vale")
+        //listaPersonas.forEach { println(it) }
     }
-         */
 }
 
 class Persona(var nombre: String, var edad: Short, var notaMedia: Float, var altura: Float) {
     override fun toString(): String {
-        return "Nombre: $nombre\n" +
+        return "\nNombre: $nombre\n" +
                 "Edad: $edad\n" +
                 "Nota media: $notaMedia\n" +
                 "Altura: $altura\n"
