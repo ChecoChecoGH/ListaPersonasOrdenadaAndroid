@@ -14,7 +14,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_main)
+        //le indico abajo que ventana quiero mostrar
+        setContentView(binding.root)
 
         for(i in 0..9){
             val auxNota = String.format(Locale.US,"%.2f", Random.nextDouble(0.0, 10.01)).toFloat()
