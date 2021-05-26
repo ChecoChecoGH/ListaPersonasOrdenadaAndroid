@@ -1,5 +1,6 @@
 package com.example.listapersonasordenada
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.listapersonasordenada.databinding.ActivityMainBinding
@@ -9,6 +10,11 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     val listaPersonas = mutableListOf<Persona>()
+
+    companion object {
+        const val TAG = "Hola"
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +28,7 @@ class MainActivity : AppCompatActivity() {
             val auxAltura = String.format(Locale.US,"%.2f", Random.nextDouble(1.50, 2.11)).toFloat()
             listaPersonas.add(Persona("Persona${i+1}", (18..100).random().toShort(), auxNota, auxAltura))
         }
+
 
         when((1..4).random()){
             1 ->{
@@ -61,6 +68,31 @@ class MainActivity : AppCompatActivity() {
         }
         //listaPersonas.forEach { println(it) }
     }
+
+    override fun onStop() {
+        guardarPreferencias(listaPersonas[0])
+        super.onStop()
+    }
+
+    private fun cargarPreferencias() : String? {
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        return sharedPref.getString("hola", "")
+    }
+
+    private fun guardarPreferencias(persona : Persona) {
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+
+        with (sharedPref.edit()) {
+            putString(TAG, persona.nombre)
+            putInt(TAG, persona.edad.toInt())
+            putFloat(TAG, persona.notaMedia)
+            putFloat(TAG, persona.altura)
+            commit()
+        }
+    }
+
+
+
 }
 
 class Persona(var nombre: String, var edad: Short, var notaMedia: Float, var altura: Float) {
