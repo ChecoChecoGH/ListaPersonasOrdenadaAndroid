@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.listapersonasordenada.databinding.ActivityMainBinding
+import kotlinx.serialization.Serializable
 import java.util.*
 import kotlin.random.Random
 
@@ -12,7 +13,10 @@ class MainActivity : AppCompatActivity() {
     val listaPersonas = mutableListOf<Persona>()
 
     companion object {
-        const val TAG = "Hola"
+        const val TAGNOMBRE = "nombre"
+        const val TAGEDAD = "edad"
+        const val TAGNOTA = "nota"
+        const val TAGALTURA = "altura"
     }
 
 
@@ -26,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         for(i in 0..9){
             val auxNota = String.format(Locale.US,"%.2f", Random.nextDouble(0.0, 10.01)).toFloat()
             val auxAltura = String.format(Locale.US,"%.2f", Random.nextDouble(1.50, 2.11)).toFloat()
-            listaPersonas.add(Persona("Persona${i+1}", (18..100).random().toShort(), auxNota, auxAltura))
+            listaPersonas.add(Persona("Persona${i+1}", (18..100).random(), auxNota, auxAltura))
         }
 
 
@@ -74,28 +78,37 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
     }
 
-    private fun cargarPreferencias() : String? {
+    private fun cargarPreferencias() : Persona?{
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
-        return sharedPref.getString("hola", "")
+        var auxPersona : Persona? = null
+        with(sharedPref){
+            val auxString = getString(TAGNOMBRE,"")?.let {
+                val persona = Persona(it,
+                    getInt(TAGEDAD, 0),
+                    getFloat(TAGNOTA, 0f),
+                    getFloat(TAGALTURA, 0f))
+                auxPersona = persona
+            }
+
+        }
+        return auxPersona
     }
 
     private fun guardarPreferencias(persona : Persona) {
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
 
         with (sharedPref.edit()) {
-            putString(TAG, persona.nombre)
-            putInt(TAG, persona.edad.toInt())
-            putFloat(TAG, persona.notaMedia)
-            putFloat(TAG, persona.altura)
+            putString(TAGNOMBRE, persona.nombre)
+            putInt(TAGEDAD, persona.edad.toInt())
+            putFloat(TAGNOTA, persona.notaMedia)
+            putFloat(TAGALTURA, persona.altura)
             commit()
         }
     }
-
-
-
 }
 
-class Persona(var nombre: String, var edad: Short, var notaMedia: Float, var altura: Float) {
+@Serializable
+data class Persona(var nombre: String, var edad: Int, var notaMedia: Float, var altura: Float) {
     override fun toString(): String {
         return "\nNombre: $nombre\n" +
                 "Edad: $edad\n" +
