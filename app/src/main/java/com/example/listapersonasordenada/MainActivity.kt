@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
             listaPersonas.add(Persona("Persona${i+1}", (18..100).random(), auxNota, auxAltura))
         }
 
-
         when((1..4).random()){
             1 ->{
                 binding.tvId2.text = "Ordenado de mayor a menor por nombre."
@@ -70,11 +69,13 @@ class MainActivity : AppCompatActivity() {
                 binding.tvId1.text = aux
             }
         }
+        binding.tvId3.text = cargarPreferencias().toString()
         //listaPersonas.forEach { println(it) }
     }
 
     override fun onStop() {
         guardarPreferencias(listaPersonas[0])
+        println("STOOOOOOOOOOOOOOOOOOOOOP")
         super.onStop()
     }
 
